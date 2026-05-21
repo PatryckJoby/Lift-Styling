@@ -1,0 +1,440 @@
+/* ============================================================
+   Lift — Custom Totara Styling
+   Sections:
+     1. Design Tokens (CSS variables)
+     2. Base & Typography
+     3. Layout (page, body, scrollbar)
+     4. Navigation
+     5. Login Page
+     6. Dashboard Tiles
+     7. Report Builder Tables (sticky headers/columns)
+     8. Footer (3-layer banded design)
+     9. Custom Lift Components (button, cards, hero)
+   ============================================================ */
+
+
+/* ============================================================
+   1. DESIGN TOKENS
+   ============================================================ */
+:root {
+    --brand-blue: #007ae5;
+    --brand-dark-blue: #083E6F;
+    --brand-orange: #EB6110;
+    --brand-orange-accent: #F5734D;
+    /* lighter orange used on button hover */
+}
+
+
+/* ============================================================
+   2. BASE & TYPOGRAPHY
+   Inter is the primary brand font; !important is required to
+   override Totara's theme defaults.
+   ============================================================ */
+body,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Inter", Arial, sans-serif !important;
+    font-weight: 300;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.tui-theme_inspire-navItem__headingText {
+    text-transform: capitalize;
+    font-size: 1.05rem;
+    font-weight: 300;
+}
+
+.tui-pageHeading__title {
+    font-weight: 300;
+}
+
+/* Hide the "last modified" timestamp shown on activity views */
+.tui-format_pathway-activityView__activityContent .modified,
+.modified {
+    display: none;
+}
+
+/* Hide the default Dashboard page heading */
+.page-heading {
+    display: none;
+}
+
+
+/* ============================================================
+   3. LAYOUT
+   ============================================================ */
+
+/* Force scrollbar always-visible so page width doesn't jump
+   when content changes height */
+body {
+    overflow-y: scroll;
+}
+
+#page {
+    padding-bottom: 30px;
+}
+
+
+/* ============================================================
+   4. NAVIGATION
+   ============================================================ */
+
+/* Constrain the desktop nav logo size */
+.tui-theme_inspire-navigation--desktopExpanded .tui-theme_inspire-navigation__headingLogo {
+    max-width: 10rem;
+}
+
+/* Divider beneath the nav heading area */
+.tui-theme_inspire-navigation .tui-theme_inspire-navigation__heading {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* User toolbar — match footer styling so it reads as a footer band */
+.userToolbar {
+    border-bottom: 1px solid var(--color-neutral-4);
+    background: var(--footer-bg-color);
+}
+
+
+/* ============================================================
+   5. LOGIN PAGE
+   ============================================================ */
+
+/* Resize the login screen logo */
+.tui-core_auth-loginNav__image {
+    height: 2.2rem;
+}
+
+/* Hide redundant login labels (login panel headings, IDP heading,
+   signup heading) — the layout reads cleaner without them */
+.loginpanel,
+.potentialidps h6,
+.signuppanel h2 {
+    display: none;
+}
+
+#page-login-index .page-layout {
+    background: #fafafa;
+}
+
+
+/* ============================================================
+   6. DASHBOARD TILES
+   Subtle hover/focus state on the "Current Learning" tiles.
+   ============================================================ */
+.block_current_learning-tile,
+.tui-theme_inspire-menuOption__heading {
+    transition: background 0.3s;
+}
+
+.block_current_learning-tile:hover,
+.block_current_learning-tile:focus-within {
+    box-shadow: none;
+    background: #eeeeee;
+}
+
+
+/* ============================================================
+   7. REPORT BUILDER TABLES
+   Sticky-header + sticky-first-column pattern for the module &
+   program completion reports. Z-index stacking matters here:
+     - Body cells in column 0: z-index 2
+     - Header row (thead th): z-index 10
+     - Top-left corner (thead th.c0): z-index 11 (must sit above both)
+   ============================================================ */
+
+/* Allow the report container to grow up to the viewport height
+   so the sticky header/column work within a scrollable area */
+div.box.nobox.rb-display-table-container.no-overflow,
+div.box.nobox.rb-display-table-container.no-overflow.embeddedshortname_module_completion_advanced,
+div.box.nobox.rb-display-table-container.no-overflow.embeddedshortname_program_completion_advanced {
+    max-height: 100vh;
+}
+
+/* Sticky top header row */
+table[data-source="rb_source_module_completion_advanced"] thead th,
+table[data-source="rb_source_program_completion_advanced"] thead th {
+    position: sticky;
+    top: 0;
+    background-color: #f9f9f9;
+    z-index: 10;
+}
+
+/* Sticky first column (applies to both th and td via .c0) */
+table[data-source="rb_source_module_completion_advanced"] .c0,
+table[data-source="rb_source_program_completion_advanced"] .c0 {
+    position: sticky;
+    left: 0;
+    background-color: #f9f9f9;
+    z-index: 2;
+    border-right: 1px solid #ddd;
+}
+
+/* Top-left corner cell must sit above both the sticky header
+   and the sticky column when scrolling diagonally */
+thead th.c0 {
+    z-index: 11 !important;
+}
+
+.reportbuilder-table .header {
+    min-width: 5em;
+}
+
+.box.nobox.rb-display-table-container.no-overflow .totara-table-container {
+    width: fit-content;
+}
+
+/* Keep the table toolbar aligned to the left edge while scrolling */
+.totara-table-container .toolbar-right-table {
+    float: left;
+    position: sticky;
+    left: 0;
+}
+
+
+/* ============================================================
+   8. FOOTER
+   Three visual layers stacked at the page bottom:
+     Layer 1 (back): dark blue   — #page-footer
+     Layer 2 (mid):  light blue  — .page-footer-main-content
+     Layer 3 (front): orange stripe — #page-footer::after
+   The dark-blue layer shows through via the margin-bottom on
+   the light-blue content block.
+   ============================================================ */
+
+/* Layer 1: outer wrapper */
+#page-footer {
+    padding: 0;
+    margin: 0;
+    background-color: var(--brand-dark-blue);
+    position: relative;
+    z-index: 2;
+}
+
+#page-footer .container-fluid {
+    padding: 0;
+    margin: 0;
+    max-width: 100%;
+}
+
+/* Layer 2: main content block (light blue band) */
+.page-footer-main-content {
+    background-color: var(--brand-blue);
+    padding: 16px 24px;
+    margin: 0 0 24px 0;
+    /* bottom gap reveals dark-blue layer 1 */
+}
+
+.page-footer-main-content .footnote {
+    color: #ffffff;
+    font-size: 0.85rem;
+    opacity: 0.85;
+}
+
+/* Layer 3: orange accent stripe pinned to bottom */
+#page-footer::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 8px;
+    background-color: var(--brand-orange);
+}
+
+/* Hide "Powered by Totara" branding */
+.page-footer-poweredby,
+.tui-core_auth-footer__poweredBy {
+    display: none;
+}
+
+
+/* ============================================================
+   9. CUSTOM LIFT COMPONENTS
+   ============================================================ */
+
+/* ---- Lift Button ----
+   White pill button with a thin orange edge on the left. On
+   hover the orange wipes across the button (::before scaleX)
+   while the text turns white. */
+.lift-btn {
+    background: #ffffff;
+    color: var(--brand-blue) !important;
+    text-decoration: none !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: clamp(12px, 1.5vw, 14px);
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 50px;
+    border: 2px solid var(--brand-blue);
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    transition: transform 0.1s ease, color 0.15s ease;
+    min-width: clamp(100px, 15vw, 160px);
+    text-align: center;
+}
+
+/* Static orange edge sitting behind the button at the left */
+.lift-btn::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 6px;
+    height: 100%;
+    background: var(--brand-orange-accent);
+    z-index: -1;
+}
+
+/* Hover-wipe layer — scales from 0 to full width on hover */
+.lift-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--brand-orange-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.25s ease;
+    z-index: -1;
+}
+
+.lift-btn:hover::before {
+    transform: scaleX(1);
+}
+
+.lift-btn:hover {
+    transform: translateY(-2px);
+    text-decoration: none !important;
+    color: #ffffff !important;
+}
+
+
+/* ---- Card Row ---- */
+.lift-card-row {
+    display: flex;
+    justify-content: center;
+    gap: 80px;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+}
+
+/* ---- Card ----
+   Horizontal card: dark-blue accent bar on the left, title +
+   blurb + button on the right. */
+.lift-card {
+    background: #ffffff;
+    border: 2px solid var(--brand-blue);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    width: clamp(200px, 28%, 280px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.lift-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.lift-card-accent {
+    width: 6px;
+    background-color: var(--brand-dark-blue);
+    flex-shrink: 0;
+}
+
+.lift-card-body {
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+}
+
+.lift-card-title {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--brand-blue);
+}
+
+.lift-card-blurb {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 13px;
+    color: #555555;
+    flex: 1;
+}
+
+/* Buttons inside cards are smaller than nav-level lift buttons */
+.lift-card .lift-btn {
+    min-width: 80px;
+    font-size: 13px;
+    padding: 8px 16px;
+    align-self: flex-start;
+}
+
+/* ---- Long Card Pill ----
+   Full-width variant of .lift-card. The body switches to a row
+   layout so title/blurb sit on the left and the button sits
+   vertically centered on the right. */
+.lift-card--long {
+    width: 100%;
+    max-width: none;
+}
+
+.lift-card--long .lift-card-body {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.lift-card--long .lift-card-text {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+}
+
+.lift-card--long .lift-btn {
+    align-self: center;
+    flex-shrink: 0;
+}
+
+
+/* ---- Hero Banner ----
+   Full-width rounded blue bar that hosts a centered logo link. */
+.lift-hero {
+    background: var(--brand-blue);
+    border-radius: 75px;
+    width: 100%;
+    box-sizing: border-box;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 5%;
+}
+
+.lift-hero-link {
+    height: 65%;
+    display: flex;
+    align-items: center;
+}
+
+.lift-hero-logo {
+    height: 100%;
+    display: inline-block;
+}
