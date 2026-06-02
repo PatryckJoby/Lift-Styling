@@ -64,8 +64,8 @@ h6,
     display: none;
 }
 
-/* Hide the default Dashboard page heading */
-.page-heading {
+/* Hide the page heading text */
+.page-heading h1 {
     display: none;
 }
 
